@@ -13,7 +13,7 @@ from sqlalchemy import Column, Integer, String, DateTime
 
 bot = commands.Bot(command_prefix="%")
 base = declarative_base()
-engine = create_engine('sqlite:///hashbrown.db')
+engine = create_engine('sqlite:///hashbrown.db?check_same_thread=False')
 
 Session = sessionmaker(bind=engine)
 
