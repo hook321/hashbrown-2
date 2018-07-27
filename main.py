@@ -43,6 +43,9 @@ async def hash(ctx):
         return
     for guild_id in config['server_ids']:
         guild = bot.get_guild(guild_id)
+        if guild is None:
+            await ctx.send("The guild ID is incorrectly configurated and we cannot correctly generate a hash. Please contact a administrator.")
+            return
         if guild.get_member(ctx.author.id) is None:
             await ctx.send("You are not in a approved guild to generate a hash!")
             return
