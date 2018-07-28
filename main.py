@@ -69,7 +69,7 @@ async def hash(ctx):
 @bot.command()
 async def listhashes(ctx):
     session = Session()
-    hashes = session.query(Hash).all()
+    hashes = session.query(Hash).order_by(Hash.hash).all()
     hashes_list = (hash.hash for hash in hashes)
     hashes_str = '\n'.join(hashes_list)
     await ctx.send("All current valid hashes:\n{}".format(hashes_str))
@@ -77,7 +77,7 @@ async def listhashes(ctx):
 @bot.command()
 async def listusers(ctx):
     session = Session()
-    users = session.query(UserCheck).all()
+    users = session.query(UserCheck).order_by(UserCheck.user_id).all()
     users_obj = [bot.get_user(user.user_id) for user in users]
     print(users_obj)
     users_str = ""
