@@ -67,23 +67,27 @@ async def hash(ctx):
     session.commit()
 
 @bot.command()
-async def listhashes(ctx):
+async def listhashes(ctx, page: int = 1):
     session = Session()
-    hashes = session.query(Hash).order_by(Hash.hash).all()
+    hashes = session.query(Hash).order_by(Hash.hash).limit(15).offset((page-1)*15).all()
     hashes_list = (hash.hash for hash in hashes)
     hashes_str = '\n'.join(hashes_list)
-    await ctx.send("All current valid hashes:\n{}".format(hashes_str))
+    length = session.query(Hash).count()
+    pages = round((length/15)+.5)
+    await ctx.send("All current valid hashes (Page {}/{}):\n{}".format(page,pages,hashes_str))
 
 @bot.command()
-async def listusers(ctx):
+async def listusers(ctx, page: int = 1):
     session = Session()
-    users = session.query(UserCheck).order_by(UserCheck.user_id).all()
+    users = session.query(UserCheck).order_by(UserCheck.user_id).limit(15).offset((page-1)*15).all()
     users_obj = [bot.get_user(user.user_id) for user in users]
     print(users_obj)
     users_str = ""
     for user in users_obj:
         users_str += "{0.name} (`{0.id}`)\n".format(user)
-    await ctx.send("The following users have generated a hash:\n{}".format(users_str))
+    length = session.query(UserCheck).count()
+    pages = round((length/15)+.5)
+    await ctx.send("The following users have generated a hash (Page {}/{}):\n{}".format(page,pages,users_str))
 
 """===Config File Handling==="""
 
