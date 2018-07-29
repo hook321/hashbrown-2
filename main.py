@@ -34,6 +34,13 @@ class Hash(base):
 
 base.metadata.create_all(engine)
 
+class FakeUser():
+    id = 0
+    name = "*Unknown User*"
+
+    def __init__(self, id):
+        self.id = id
+
 """===Commands==="""
 
 @bot.command()
@@ -80,10 +87,11 @@ async def listhashes(ctx, page: int = 1):
 async def listusers(ctx, page: int = 1):
     session = Session()
     users = session.query(UserCheck).order_by(UserCheck.user_id).limit(15).offset((page-1)*15).all()
-    users_obj = [bot.get_user(user.user_id) for user in users]
-    print(users_obj)
+    users_obj = [bot.get_user(user.user_id) or FakeUser(user.user_id) for user in users]
     users_str = ""
     for user in users_obj:
+        if user is None:
+            continue
         users_str += "{0.name} (`{0.id}`)\n".format(user)
     length = session.query(UserCheck).count()
     pages = round((length/15)+.5)
