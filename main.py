@@ -97,6 +97,22 @@ async def listusers(ctx, page: int = 1):
     pages = round((length/15)+.5)
     await ctx.send("The following users have generated a hash (Page {}/{}):\n{}".format(page,pages,users_str))
 
+@bot.command()
+async def update(ctx):
+    """Pulls code from GitHub and restarts."""
+    res = os.popen("git pull origin master").read()
+    if res.startswith('Already up-to-date.'):
+        await ctx.send('```\n' + res + '```')
+    else:
+        await ctx.send('```\n' + res + '```')
+        await ctx.bot.get_command('restart').callback(ctx)
+
+@bot.command()
+async def restart(ctx):
+    if ctx.author.permissions_in(ctx.channel).manage_messages:
+        await ctx.send("Restarting Bot...")
+        os.execl(sys.executable, sys.executable, *sys.argv)
+
 """===Config File Handling==="""
 
 if os.path.isfile("config.json"):
