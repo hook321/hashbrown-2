@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, DateTime
 
-bot = commands.Bot(command_prefix="%")
+bot = commands.Bot(command_prefix="#")
 base = declarative_base()
 engine = create_engine('sqlite:///hashbrown.db?check_same_thread=False')
 
@@ -122,7 +122,7 @@ else:
     with open("config.json", "w") as f:
         config = {"discord_key": "YOUR_KEY_HERE",
                   "server_ids": [],
-                  "prefix": "%"
+                  "prefix": "#"
                   }
         f.write(json.dumps(config, indent=3))
 
