@@ -46,7 +46,7 @@ class FakeUser():
 @bot.command()
 async def hash(ctx):
     if not isinstance(ctx.channel, discord.DMChannel):
-        await ctx.send("This command must be done in a DM to preserve the security of your hash.")
+        await ctx.send("This command must be done in a DM to prevent other people from linking your hash to you.")
         return
     for guild_id in config['server_ids']:
         guild = bot.get_guild(guild_id)
@@ -60,13 +60,13 @@ async def hash(ctx):
     user_checks = session.query(UserCheck).all()
     user_ids = (check.user_id for check in user_checks)
     if ctx.author.id in user_ids:
-        await ctx.send("You have already generated a hash. If you misplaced your hash, please contact @bkeeneykid#9671. Keep in mind that your hash cannot be traced back to you.")
+        await ctx.send("You have already generated a hash. If you misplaced your hash, please contact a mod. Keep in mind that we are unable to retrieve your hash.")
         return
     hash_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     hash_obj = Hash(hash=hash_str)
     session.add(hash_obj)
     await ctx.send("Your hash is `{}`. Keep this secret, and copy it to your survey. This message will be deleted in 60 \
-    seconds so that we cannot track your hash, and you won't be able to request it again, so please save your hash now. "
+    seconds to prevent your hash from being traced back to you, and you won't be able to request it again, so please save your hash now. "
                    .format(hash_str),delete_after=60)
     user_check = UserCheck(user_id=ctx.author.id)
     user_check.time_hashed = datetime.datetime.utcnow()
