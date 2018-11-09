@@ -51,7 +51,7 @@ async def hash(ctx):
     for guild_id in config['server_ids']:
         guild = bot.get_guild(guild_id)
         if guild is None:
-            await ctx.send("The guild ID is incorrectly configurated and we cannot correctly generate a hash. Please contact a administrator.")
+            await ctx.send("The guild ID is incorrectly configurated and we cannot generate a hash. Please contact a administrator.")
             return
         if guild.get_member(ctx.author.id) is None:
             await ctx.send("You are not in a approved guild to generate a hash!")
@@ -65,7 +65,7 @@ async def hash(ctx):
     hash_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     hash_obj = Hash(hash=hash_str)
     session.add(hash_obj)
-    await ctx.send("Your hash is `{}`. Keep this secret, and copy it to your survey. This message will be deleted in 60 \
+    await ctx.send("Your hash is **`{}`**. Keep this secret, and copy it to your survey. This message will be deleted in 60 \
     seconds to prevent your hash from being traced back to you, and you won't be able to request it again, so please save your hash now."
                    .format(hash_str),delete_after=60)
     user_check = UserCheck(user_id=ctx.author.id)
