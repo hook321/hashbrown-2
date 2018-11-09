@@ -66,7 +66,7 @@ async def hash(ctx):
     hash_obj = Hash(hash=hash_str)
     session.add(hash_obj)
     await ctx.send("Your hash is `{}`. Keep this secret, and copy it to your survey. This message will be deleted in 60 \
-    seconds to prevent your hash from being traced back to you, and you won't be able to request it again, so please save your hash now. "
+    seconds to prevent your hash from being traced back to you, and you won't be able to request it again, so please save your hash now."
                    .format(hash_str),delete_after=60)
     user_check = UserCheck(user_id=ctx.author.id)
     user_check.time_hashed = datetime.datetime.utcnow()
